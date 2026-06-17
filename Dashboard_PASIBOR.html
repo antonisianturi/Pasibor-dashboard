@@ -86,13 +86,44 @@ body.dark{background:#fff!important;color:#000!important}
 .card .value{font-size:16pt!important}
 .chart-box{page-break-inside:avoid;background:#fff!important;border:1px solid #999!important;-webkit-print-color-adjust:exact!important;print-color-adjust:exact!important}
 table{page-break-inside:auto;font-size:10pt!important}
-thead{display:table-header-group}tfoot{display:table-footer-group}
+thead{display:table-header-group}
+tfoot{display:table-row-group}
 thead th{background:#C62828!important;color:#fff!important;-webkit-print-color-adjust:exact!important;print-color-adjust:exact!important}
 tbody tr{background:#fff!important;-webkit-print-color-adjust:exact!important}
 tbody tr:nth-child(even){background:#F9F9F9!important;-webkit-print-color-adjust:exact!important}
 tbody td{color:#000!important}
 tfoot td{background:#FFEBEE!important;color:#000!important;-webkit-print-color-adjust:exact!important;print-color-adjust:exact!important}
 svg text{fill:#000!important}
+/* === PATCH: Page break sesuai struktur PASIMBUR === */
+
+/* Header + RINGKASAN tetap satu halaman */
+.header{page-break-after:avoid!important}
+
+/* Halaman 1: RINGKASAN → break ke halaman 2 */
+.section:nth-of-type(1){
+  page-break-after:always!important;
+}
+
+/* Halaman 2: GRAFIK + GRAFIK PER BULAN */
+.section:nth-of-type(2),
+.section:nth-of-type(3){
+  page-break-inside:avoid!important;
+}
+
+/* Setelah GRAFIK PER BULAN → break ke halaman 3 (tabel) */
+.section:nth-of-type(3){
+  page-break-after:always!important;
+}
+
+/* DAFTAR PEMASUKAN → setelah selesai, break ke halaman PENGELUARAN */
+.section:nth-of-type(4){
+  page-break-after:always!important;
+}
+
+/* Tabel: header (thead) tetap muncul di tiap halaman untuk context,
+   tapi tfoot hanya di akhir tabel */
+.table-wrap{page-break-inside:auto}
+table tbody tr{page-break-inside:avoid;page-break-after:auto}
 }
 body.printing{background:#fff!important;color:#000!important}
 body.printing .container{box-shadow:none!important;background:#fff!important}
@@ -102,6 +133,15 @@ body.printing thead th{background:#C62828!important;color:#fff!important;-webkit
 body.printing tbody td{color:#000!important;background:transparent!important}
 body.printing tfoot td{background:#FFEBEE!important;-webkit-print-color-adjust:exact!important}
 body.printing svg text{fill:#000!important}
+body.printing tfoot{display:table-row-group!important}
+body.printing .header{page-break-after:avoid!important}
+body.printing .section:nth-of-type(1){page-break-after:always!important}
+body.printing .section:nth-of-type(2),
+body.printing .section:nth-of-type(3){page-break-inside:avoid!important}
+body.printing .section:nth-of-type(3){page-break-after:always!important}
+body.printing .section:nth-of-type(4){page-break-after:always!important}
+body.printing .table-wrap{page-break-inside:auto}
+body.printing table tbody tr{page-break-inside:avoid}
 </style>
 </head>
 <body>
