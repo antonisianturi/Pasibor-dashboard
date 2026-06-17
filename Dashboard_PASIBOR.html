@@ -124,6 +124,20 @@ svg text{fill:#000!important}
    tapi tfoot hanya di akhir tabel */
 .table-wrap{page-break-inside:auto}
 table tbody tr{page-break-inside:avoid;page-break-after:auto}
+/* === PATCH: Page break Cetak Browser === */
+.header{page-break-after:avoid!important}
+.section:nth-of-type(1){page-break-after:always!important}
+.section:nth-of-type(2){page-break-after:avoid!important;page-break-inside:avoid!important}
+.section:nth-of-type(3){page-break-after:always!important;page-break-inside:avoid!important}
+.section:nth-of-type(4){page-break-after:always!important}
+.section:nth-of-type(5){page-break-before:always!important}
+
+/* Grafik fit di Cetak */
+.chart-box{max-width:100%!important;overflow:visible!important}
+#chart1 svg,#chartMonthly svg{max-width:100%!important;width:100%!important;height:auto!important;display:block!important}
+#chartMonthly svg{max-height:280px!important}
+#chart1 svg{max-height:240px!important}
+#chart1{max-width:500px!important;margin:0 auto!important}
 }
 body.printing{background:#fff!important;color:#000!important}
 body.printing .container{box-shadow:none!important;background:#fff!important}
@@ -142,6 +156,75 @@ body.printing .section:nth-of-type(3){page-break-after:always!important}
 body.printing .section:nth-of-type(4){page-break-after:always!important}
 body.printing .table-wrap{page-break-inside:auto}
 body.printing table tbody tr{page-break-inside:avoid}
+/* === PATCH: Grafik fit di halaman A4 === */
+body.printing .chart-box{
+  page-break-inside:avoid!important;
+  max-width:100%!important;
+  overflow:visible!important;
+}
+body.printing #chart1{
+  max-width:500px!important;
+  margin:0 auto!important;
+}
+body.printing #chart1 svg,
+body.printing #chartMonthly svg{
+  max-width:100%!important;
+  width:100%!important;
+  height:auto!important;
+  display:block!important;
+}
+body.printing #chartMonthly svg{
+  max-height:280px!important;
+}
+body.printing #chart1 svg{
+  max-height:240px!important;
+}
+/* === PATCH: Page break sesuai struktur PASIMBUR === */
+/* Halaman 1: Header + RINGKASAN saja */
+body.printing .header{page-break-after:avoid!important}
+body.printing .section:nth-of-type(1){page-break-after:always!important}
+
+/* Halaman 2: GRAFIK + GRAFIK PER BULAN */
+body.printing .section:nth-of-type(2){page-break-after:avoid!important;page-break-inside:avoid!important}
+body.printing .section:nth-of-type(3){page-break-after:always!important;page-break-inside:avoid!important}
+
+/* Halaman 3+: DAFTAR PEMASUKAN (full pages) */
+body.printing .section:nth-of-type(4){page-break-after:always!important}
+
+/* Halaman akhir: DAFTAR PENGELUARAN */
+body.printing .section:nth-of-type(5){page-break-before:always!important}
+/* === PATCH FINAL: Fix grafik terpotong di PDF (html2canvas) === */
+/* Paksa container fit A4 saat export PDF */
+body.printing .container{
+  max-width:790px!important;
+  width:790px!important;
+  margin:0 auto!important;
+  padding:15px!important;
+}
+body.printing .charts{
+  max-width:100%!important;
+  overflow:hidden!important;
+  display:block!important;
+}
+body.printing .chart-box{
+  max-width:100%!important;
+  overflow:hidden!important;
+  width:100%!important;
+  box-sizing:border-box!important;
+}
+body.printing .chart-box svg{
+  max-width:100%!important;
+  width:100%!important;
+  height:auto!important;
+  display:block!important;
+}
+/* Tambahan: cards tidak overflow */
+body.printing .cards{
+  max-width:100%!important;
+  display:grid!important;
+  grid-template-columns:repeat(3,1fr)!important;
+  gap:10px!important;
+}
 </style>
 </head>
 <body>
@@ -250,12 +333,52 @@ function parseNum(s){ if(typeof s==="number")return s; if(!s)return 0; const n=p
 
 function parseFromArray(rows){
   const meta={ketua:"",sekretaris:"",bendahara:"",periode:""};
+  
+  // Helper: extract nama setelah label, stop sebelum label berikutnya
+  function extractName(line, label, stopLabels){
+    const labelIdx = line.indexOf(label);
+    if(labelIdx < 0) return "";
+    const colonIdx = line.indexOf(":", labelIdx);
+    if(colonIdx < 0) return "";
+    let endIdx = line.length;
+    stopLabels.forEach(stop => {
+      const sIdx = line.indexOf(stop, colonIdx + 1);
+      if(sIdx > 0 && sIdx < endIdx) endIdx = sIdx;
+    });
+    return line.substring(colonIdx + 1, endIdx).trim().replace(/\s+/g," ");
+  }
+  
   for(let i=0;i<Math.min(rows.length,10);i++){
     const line=(rows[i]||[]).join(" ").toUpperCase();
-    if(line.indexOf("KETUA")>=0){const m=line.match(/KETUA[^:]*:\s*([A-Z .]+?)(?:\s\s|$)/);if(m)meta.ketua=m[1].trim();}
-    if(line.indexOf("SEKRETARIS")>=0){const m=line.match(/SEKRETARIS[^:]*:\s*([A-Z .]+?)(?:\s\s|$)/);if(m)meta.sekretaris=m[1].trim();}
-    if(line.indexOf("BENDAHARA")>=0){const m=line.match(/BENDAHARA[^:]*:\s*([A-Z .]+?)(?:\s\s|$)/);if(m)meta.bendahara=m[1].trim();}
-    if(line.indexOf("PER:")>=0||line.indexOf("PERIODE")>=0){meta.periode=(rows[i]||[]).join(" ").trim();}
+    
+    // Extract pengurus dengan stop di label berikutnya
+    if(line.indexOf("KETUA")>=0){
+      const name = extractName(line, "KETUA", ["SEKRETARIS","BENDAHARA","PER:","PERIODE"]);
+      if(name) meta.ketua = name;
+    }
+    if(line.indexOf("SEKRETARIS")>=0){
+      const name = extractName(line, "SEKRETARIS", ["BENDAHARA","KETUA","PER:","PERIODE"]);
+      if(name) meta.sekretaris = name;
+    }
+    if(line.indexOf("BENDAHARA")>=0){
+      const name = extractName(line, "BENDAHARA", ["KETUA","SEKRETARIS","PER:","PERIODE"]);
+      if(name) meta.bendahara = name;
+    }
+    
+    // PERIODE: ambil HANYA bagian sebelum KETUA/SEKRETARIS/BENDAHARA
+    if(line.indexOf("PER:")>=0||line.indexOf("PERIODE")>=0){
+      let raw = (rows[i]||[]).join(" ").trim();
+      // Buang bagian "KETUA UMUM : ... SEKRETARIS : ... BENDAHARA : ..."
+      const cutLabels = ["KETUA","SEKRETARIS","BENDAHARA"];
+      const upper = raw.toUpperCase();
+      let cutAt = raw.length;
+      cutLabels.forEach(lbl => {
+        const idx = upper.indexOf(lbl);
+        if(idx > 0 && idx < cutAt) cutAt = idx;
+      });
+      meta.periode = raw.substring(0, cutAt).trim().replace(/\s+/g," ").replace(/[,;]+$/,"");
+    }
+  }
   }
   let headerIdx=-1;
   for(let i=0;i<rows.length;i++){
@@ -456,8 +579,41 @@ function exportPDF(){
     const wd=document.body.classList.contains('dark');
     if(wd)document.body.classList.remove('dark');
     const el=document.querySelector('.container'),date=new Date().toISOString().slice(0,10);
-    const opt={margin:[10,10,10,10],filename:'Dashboard_PASIBOR_'+date+'.pdf',image:{type:'jpeg',quality:0.95},html2canvas:{scale:2,useCORS:true,backgroundColor:'#ffffff'},jsPDF:{unit:'mm',format:'a4',orientation:'portrait'},pagebreak:{mode:['avoid-all','css','legacy']}};
-    html2pdf().from(el).set(opt).save().then(()=>{document.body.classList.remove('printing');if(wd)document.body.classList.add('dark');}).catch(err=>{document.body.classList.remove('printing');if(wd)document.body.classList.add('dark');alert('Gagal PDF: '+err.message);});
+    
+    // Simpan style asli & paksa width fit A4
+    const origWidth = el.style.width;
+    const origMaxWidth = el.style.maxWidth;
+    el.style.width = '790px';
+    el.style.maxWidth = '790px';
+    
+    const opt={
+      margin:[10,10,10,10],
+      filename:'Dashboard_PASIBOR_'+date+'.pdf',
+      image:{type:'jpeg',quality:0.95},
+      html2canvas:{
+        scale:2,
+        useCORS:true,
+        backgroundColor:'#ffffff',
+        windowWidth:820,
+        width:790
+      },
+      jsPDF:{unit:'mm',format:'a4',orientation:'portrait'},
+      pagebreak:{mode:['avoid-all','css','legacy']}
+    };
+    
+    html2pdf().from(el).set(opt).save().then(()=>{
+      // Kembalikan style asli
+      el.style.width = origWidth;
+      el.style.maxWidth = origMaxWidth;
+      document.body.classList.remove('printing');
+      if(wd)document.body.classList.add('dark');
+    }).catch(err=>{
+      el.style.width = origWidth;
+      el.style.maxWidth = origMaxWidth;
+      document.body.classList.remove('printing');
+      if(wd)document.body.classList.add('dark');
+      alert('Gagal PDF: '+err.message);
+    });
   }).catch(err=>alert('Gagal load library: '+err.message));
 }
 function installPWA(){
