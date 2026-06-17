@@ -1,0 +1,79 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>PASIBOR - Mengalihkan...</title>
+<link rel="icon" href="logo.png">
+
+<!-- Redirect otomatis via meta tag (fallback jika JS mati) -->
+<meta http-equiv="refresh" content="0; url=./Dashboard_PASIBOR.html">
+
+<!-- Redirect via JavaScript (lebih cepat & rapi di history browser) -->
+<script>
+  window.location.replace("./Dashboard_PASIBOR.html");
+</script>
+
+<style>
+  body {
+    font-family: 'Segoe UI', Tahoma, Arial, sans-serif;
+    background: linear-gradient(135deg, #C62828, #FFC107);
+    color: #fff;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    min-height: 100vh;
+    margin: 0;
+    text-align: center;
+    padding: 20px;
+  }
+  .box {
+    background: rgba(0,0,0,0.25);
+    padding: 30px 40px;
+    border-radius: 16px;
+    backdrop-filter: blur(10px);
+  }
+  .logo {
+    width: 100px;
+    height: 100px;
+    background: #fff;
+    border-radius: 12px;
+    padding: 8px;
+    margin: 0 auto 16px;
+    display: block;
+  }
+  h1 { font-size: 22px; margin-bottom: 8px; }
+  p { font-size: 15px; opacity: 0.9; margin-bottom: 14px; }
+  a {
+    color: #fff;
+    background: rgba(255,255,255,0.2);
+    padding: 10px 20px;
+    border-radius: 8px;
+    text-decoration: none;
+    font-weight: bold;
+    display: inline-block;
+  }
+  a:hover { background: rgba(255,255,255,0.35); }
+  .spinner {
+    border: 3px solid rgba(255,255,255,0.3);
+    border-top: 3px solid #fff;
+    border-radius: 50%;
+    width: 30px;
+    height: 30px;
+    margin: 16px auto;
+    animation: spin 1s linear infinite;
+  }
+  @keyframes spin { to { transform: rotate(360deg); } }
+</style>
+</head>
+<body>
+  <div class="box">
+    <img src="logo.png" class="logo" alt="Logo PASIBOR">
+    <h1>PASIBOR</h1>
+    <p>Mengalihkan ke Dashboard...</p>
+    <div class="spinner"></div>
+    <p>Jika tidak otomatis:</p>
+    <a href="./Dashboard_PASIBOR.html">Buka Dashboard &rarr;</a>
+  </div>
+</body>
+</html>

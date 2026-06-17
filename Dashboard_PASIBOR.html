@@ -1,0 +1,470 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title id="pageTitle">PASIBOR 2026</title>
+<link rel="manifest" href="manifest.json">
+<meta name="theme-color" content="#C62828">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+<meta name="apple-mobile-web-app-title" content="PASIBOR">
+<link rel="apple-touch-icon" href="logo.png">
+<link rel="icon" href="logo.png">
+<style>
+:root{--bg:#F5F5F5;--container-bg:#fff;--text:#222;--muted:#555;--border:#E0E0E0;--accent:#C62828;--accent-soft:#FDECEA;--table-head:#C62828;--table-stripe:#F9F9F9;--table-hover:#FFF8E1;--chart-bg:#FAFAFA;--status-bar:#F0F4F8;--tfoot-bg:#FFEBEE;--pengurus-bg:#FFF8E1;}
+body.dark{--bg:#0F1419;--container-bg:#1A1F2E;--text:#E4E6EB;--muted:#A8B0BC;--border:#2A3142;--accent:#E57373;--accent-soft:#3A1F1F;--table-head:#5F2A2A;--table-stripe:#1F2533;--table-hover:#2A3142;--chart-bg:#1F2533;--status-bar:#1F2533;--tfoot-bg:#3F1E1E;--pengurus-bg:#2A2418;}
+*{box-sizing:border-box;margin:0;padding:0}
+body{font-family:'Segoe UI',Tahoma,Arial,sans-serif;background:var(--bg);color:var(--text);padding:20px;font-size:16px;line-height:1.5;transition:background .3s,color .3s}
+.container{max-width:1200px;margin:0 auto;background:var(--container-bg);padding:30px 40px;border-radius:16px;box-shadow:0 4px 20px rgba(0,0,0,.08)}
+.header{border-bottom:4px solid var(--accent);padding-bottom:20px;margin-bottom:20px}
+.actions{display:flex;gap:8px;flex-wrap:wrap;justify-content:flex-end;margin-bottom:14px;padding-bottom:12px;border-bottom:1px dashed var(--border)}
+.header-main{display:flex;align-items:center;gap:20px;flex-wrap:wrap}
+.logo-img{width:110px;height:110px;border-radius:12px;object-fit:contain;background:#fff;border:3px solid var(--accent);flex-shrink:0;padding:4px}
+.title-block{flex:1;min-width:280px}
+.title-block h1{color:var(--accent);font-size:26px;margin-bottom:4px;line-height:1.2;word-break:break-word}
+.title-block .subtitle{color:var(--muted);font-size:16px;margin-bottom:8px}
+.pengurus{font-size:14px;color:var(--text);background:var(--pengurus-bg);padding:8px 14px;border-radius:6px;display:inline-block}
+.btn{color:#fff;border:none;padding:10px 14px;font-size:13px;font-weight:bold;border-radius:8px;cursor:pointer;box-shadow:0 2px 6px rgba(0,0,0,.15)}
+.btn-print{background:#1565C0}.btn-refresh{background:#2E7D32}.btn-config{background:#757575}
+.btn-pdf{background:#AD1457}.btn-theme{background:#5E35B1}.btn-install{background:#00897B}
+.btn-save{background:#2E7D32;padding:14px 28px;font-size:16px}.btn-reset{background:#C62828}
+.btn:disabled{opacity:.6;cursor:not-allowed}
+.spin{display:inline-block;animation:spin 1s linear infinite}
+@keyframes spin{from{transform:rotate(0)}to{transform:rotate(360deg)}}
+.setup-form{background:linear-gradient(135deg,#FFF8E1,#FFE082);border:3px solid #FFB300;border-radius:12px;padding:24px;margin-bottom:24px;color:#222}
+.setup-form h2{color:#E65100;font-size:22px;margin-bottom:10px}
+.setup-form textarea{width:100%;padding:12px;font-size:14px;font-family:Consolas,monospace;border:2px solid #FFA000;border-radius:8px;min-height:80px;background:#fff;color:#222}
+.setup-form .step-card{background:#fff;border-left:5px solid #FF9800;padding:12px 16px;margin:10px 0;border-radius:6px}
+.status-bar{display:flex;justify-content:space-between;flex-wrap:wrap;gap:10px;margin-bottom:18px;padding:10px 16px;background:var(--status-bar);border-radius:8px;font-size:14px}
+.mode{font-weight:bold}.mode.live{color:#43A047}.mode.demo{color:#FFA726}.mode.offline{color:#EF5350}
+.banner{padding:14px 18px;border-radius:10px;margin-bottom:18px;font-size:15px}
+.banner.warn{background:#FFF3CD;border-left:6px solid #FFC107;color:#856404}
+.banner.error{background:#F8D7DA;border-left:6px solid #DC3545;color:#721C24}
+.banner b{display:block;margin-bottom:4px;font-size:16px}
+.banner code{background:rgba(0,0,0,.08);padding:2px 6px;border-radius:4px;font-family:Consolas,monospace;font-size:13px}
+.period-filter{background:var(--accent-soft);border:1px solid var(--border);border-radius:10px;padding:14px 18px;margin-bottom:18px;display:flex;gap:10px;align-items:center;flex-wrap:wrap;color:var(--text)}
+.period-filter input[type=date]{padding:8px 10px;border:1px solid var(--border);border-radius:6px;font-size:14px;background:var(--container-bg);color:var(--text)}
+.period-filter .quick-btn{background:var(--container-bg);border:1px solid var(--accent);color:var(--accent);padding:6px 12px;border-radius:6px;font-size:13px;cursor:pointer;font-weight:bold}
+.period-filter .quick-btn.active,.period-filter .quick-btn:hover{background:var(--accent);color:#fff}
+.section{margin:28px 0}
+.section-title{font-size:22px;font-weight:bold;color:var(--accent);border-bottom:2px solid var(--accent);padding-bottom:6px;margin-bottom:18px}
+.cards{display:grid;grid-template-columns:repeat(3,1fr);gap:18px}
+.card{padding:22px 24px;border-radius:12px;color:#fff;box-shadow:0 3px 10px rgba(0,0,0,.12)}
+.card .label{font-size:15px;opacity:.95}.card .value{font-size:32px;font-weight:bold;margin-top:10px}
+.card.green{background:linear-gradient(135deg,#2E7D32,#43A047)}
+.card.red{background:linear-gradient(135deg,#C62828,#E53935)}
+.card.blue{background:linear-gradient(135deg,#1565C0,#1E88E5)}
+.charts{display:grid;grid-template-columns:1fr;gap:25px}
+.chart-box{background:var(--chart-bg);border:1px solid var(--border);border-radius:12px;padding:20px}
+.chart-box h3{font-size:17px;color:var(--accent);margin-bottom:12px}
+.table-wrap{overflow-x:auto}
+.search-box{width:100%;padding:10px 14px;font-size:16px;border:2px solid var(--border);border-radius:8px;margin-bottom:12px;background:var(--container-bg);color:var(--text)}
+table{width:100%;border-collapse:collapse;font-size:15px;color:var(--text)}
+thead th{background:var(--table-head);color:#fff;padding:12px 10px;text-align:left}
+tbody td{padding:10px;border-bottom:1px solid var(--border)}
+tbody tr:nth-child(even){background:var(--table-stripe)}
+tbody tr:hover{background:var(--table-hover)}
+td.num,th.num{text-align:right}td.center,th.center{text-align:center}
+tfoot td{background:var(--tfoot-bg);font-weight:bold;padding:12px 10px;border-top:2px solid var(--accent);font-size:16px;color:var(--text)}
+.footer{margin-top:40px;padding-top:20px;border-top:2px solid var(--border);text-align:center;color:var(--muted);font-size:14px}
+@media(max-width:768px){.cards{grid-template-columns:1fr}.header-main{flex-direction:column;text-align:center}.actions{justify-content:center}.title-block{min-width:0;width:100%}.title-block h1{font-size:20px}.btn{font-size:12px;padding:8px 10px}}
+@media print{
+@page{size:A4 portrait;margin:1.2cm}@page :first{margin-top:1cm}
+body{background:#fff!important;color:#000!important;padding:0!important;font-size:11pt!important}
+body.dark{background:#fff!important;color:#000!important}
+.container{box-shadow:none!important;padding:0!important;max-width:100%!important;background:#fff!important}
+.actions,.search-box,.status-bar,.banner,.setup-form,.period-filter,#btnInstall{display:none!important}
+.header{page-break-after:avoid;border-bottom:3px solid #C62828!important}
+.logo-img{width:80px!important;height:80px!important;border:2px solid #C62828!important}
+.title-block h1{font-size:16pt!important;color:#C62828!important}
+.pengurus{font-size:9pt!important;background:#FFF8E1!important;color:#000!important;-webkit-print-color-adjust:exact!important;print-color-adjust:exact!important}
+.section{margin:14px 0!important;page-break-inside:avoid}
+.section-title{font-size:13pt!important;page-break-after:avoid}
+.cards{display:grid!important;grid-template-columns:repeat(3,1fr)!important;gap:10px!important}
+.card{color:#fff!important;-webkit-print-color-adjust:exact!important;print-color-adjust:exact!important;padding:12px 14px!important;box-shadow:none!important}
+.card .value{font-size:16pt!important}
+.chart-box{page-break-inside:avoid;background:#fff!important;border:1px solid #999!important;-webkit-print-color-adjust:exact!important;print-color-adjust:exact!important}
+table{page-break-inside:auto;font-size:10pt!important}
+thead{display:table-header-group}tfoot{display:table-footer-group}
+thead th{background:#C62828!important;color:#fff!important;-webkit-print-color-adjust:exact!important;print-color-adjust:exact!important}
+tbody tr{background:#fff!important;-webkit-print-color-adjust:exact!important}
+tbody tr:nth-child(even){background:#F9F9F9!important;-webkit-print-color-adjust:exact!important}
+tbody td{color:#000!important}
+tfoot td{background:#FFEBEE!important;color:#000!important;-webkit-print-color-adjust:exact!important;print-color-adjust:exact!important}
+svg text{fill:#000!important}
+}
+body.printing{background:#fff!important;color:#000!important}
+body.printing .container{box-shadow:none!important;background:#fff!important}
+body.printing .actions,body.printing .search-box,body.printing .status-bar,body.printing .banner,body.printing .setup-form,body.printing .period-filter,body.printing #btnInstall{display:none!important}
+body.printing .card{-webkit-print-color-adjust:exact!important;print-color-adjust:exact!important}
+body.printing thead th{background:#C62828!important;color:#fff!important;-webkit-print-color-adjust:exact!important}
+body.printing tbody td{color:#000!important;background:transparent!important}
+body.printing tfoot td{background:#FFEBEE!important;-webkit-print-color-adjust:exact!important}
+body.printing svg text{fill:#000!important}
+</style>
+</head>
+<body>
+<div class="container">
+<div class="header">
+  <div class="actions">
+    <button class="btn btn-refresh" id="btnRefresh" onclick="loadData(true)"><span id="refIcon">&#x1F504;</span> Refresh</button>
+    <button class="btn btn-theme" onclick="toggleTheme()" id="btnTheme">&#x1F319; Dark</button>
+    <button class="btn btn-pdf" onclick="exportPDF()">&#x1F4C4; PDF</button>
+    <button class="btn btn-print" onclick="window.print()">&#x1F5A8;&#xFE0F; Cetak</button>
+    <button class="btn btn-config" onclick="showSetup()">&#x2699;&#xFE0F; Setup</button>
+    <button class="btn btn-install" id="btnInstall" onclick="installPWA()" style="display:none">&#x1F4F2; Install</button>
+  </div>
+  <div class="header-main">
+    <img src="logo.png" class="logo-img" alt="Logo PASIBOR">
+    <div class="title-block">
+      <h1>DASHBOARD LAPORAN KEUANGAN PASIBOR</h1>
+      <div class="subtitle" id="periodLabel">DPD Kota Medan Sekitarnya &middot; Tahun 2026</div>
+      <div class="pengurus" id="pengurusLabel">Memuat data pengurus...</div>
+    </div>
+  </div>
+</div>
+<div id="setupArea"></div>
+<div class="status-bar">
+  <div>Status: <span class="mode" id="modeLabel">Memuat...</span></div>
+  <div>Terakhir update: <span id="lastUpdate">-</span></div>
+</div>
+<div id="bannerArea"></div>
+<div class="period-filter">
+  <b>&#x1F4C5; Filter Periode:</b>
+  <label>Dari: <input type="date" id="dateFrom"></label>
+  <label>S/D: <input type="date" id="dateTo"></label>
+  <button class="quick-btn active" onclick="applyPeriod('all',this)">Semua</button>
+  <button class="quick-btn" onclick="applyPeriod('month',this)">Bulan Ini</button>
+  <button class="quick-btn" onclick="applyPeriod('3months',this)">3 Bulan Terakhir</button>
+  <button class="quick-btn" onclick="applyPeriod('year',this)">Tahun Ini</button>
+  <button class="quick-btn" onclick="applyCustomPeriod(this)">Apply Custom</button>
+</div>
+<div class="section">
+  <div class="section-title">RINGKASAN</div>
+  <div class="cards">
+    <div class="card green"><div class="label">TOTAL PEMASUKAN</div><div class="value" id="totalIn">Rp 0</div></div>
+    <div class="card red"><div class="label">TOTAL PENGELUARAN</div><div class="value" id="totalOut">Rp 0</div></div>
+    <div class="card blue"><div class="label">SALDO KAS</div><div class="value" id="saldo">Rp 0</div></div>
+  </div>
+</div>
+<div class="section">
+  <div class="section-title">GRAFIK</div>
+  <div class="charts"><div class="chart-box"><h3>Pemasukan vs Pengeluaran vs Saldo</h3><div id="chart1"></div></div></div>
+</div>
+<div class="section">
+  <div class="section-title">GRAFIK PER BULAN</div>
+  <div class="charts"><div class="chart-box"><h3>Pemasukan vs Pengeluaran per Bulan</h3><div id="chartMonthly"></div></div></div>
+</div>
+<div class="section">
+  <div class="section-title">DAFTAR PEMASUKAN</div>
+  <input class="search-box" id="searchIn" placeholder="Cari pemasukan...">
+  <div class="table-wrap"><table id="tblIn">
+    <thead><tr><th class="center" style="width:50px">No</th><th style="width:130px">Tanggal</th><th>Deskripsi</th><th class="num" style="width:170px">Nominal</th></tr></thead>
+    <tbody></tbody>
+    <tfoot><tr><td colspan="3">TOTAL PEMASUKAN (Periode)</td><td class="num" id="footIn"></td></tr></tfoot>
+  </table></div>
+</div>
+<div class="section">
+  <div class="section-title">DAFTAR PENGELUARAN</div>
+  <input class="search-box" id="searchOut" placeholder="Cari pengeluaran...">
+  <div class="table-wrap"><table id="tblOut">
+    <thead><tr><th class="center" style="width:50px">No</th><th style="width:130px">Tanggal</th><th>Deskripsi</th><th class="num" style="width:170px">Nominal</th></tr></thead>
+    <tbody></tbody>
+    <tfoot><tr><td colspan="3">TOTAL PENGELUARAN (Periode)</td><td class="num" id="footOut"></td></tr></tfoot>
+  </table></div>
+</div>
+<div class="footer">
+  Dashboard PASIBOR - Parsadaan Siallagan Dohot Boruna<br>
+  <span id="printDate"></span>
+</div>
+</div>
+<script>
+const STORAGE_URL = "pasibor_final_url";
+const STORAGE_CACHE = "pasibor_final_cache";
+let PEMASUKAN = [], PENGELUARAN = [];
+let META = {ketua:"",sekretaris:"",bendahara:"",periode:""};
+let FILTER_FROM = null, FILTER_TO = null;
+let html2pdfLoaded = false, html2pdfLoading = null;
+let deferredPrompt = null;
+const rupiah = n => "Rp " + (Math.round(n)||0).toLocaleString("id-ID");
+const BLN = ["Jan","Feb","Mar","Apr","Mei","Jun","Jul","Agu","Sep","Okt","Nov","Des"];
+const fmtDate = s => { if(!s)return""; const m=s.match(/^(\d{4})-(\d{2})-(\d{2})/); return m?parseInt(m[3])+"-"+BLN[parseInt(m[2])-1]+"-"+m[1]:s; };
+
+function excelSerialToISO(val){
+  if(val===null||val===undefined||val==="")return "";
+  const s=String(val).trim();
+  const iso=s.match(/^(\d{4})-(\d{1,2})-(\d{1,2})/);
+  if(iso)return iso[1]+"-"+iso[2].padStart(2,'0')+"-"+iso[3].padStart(2,'0');
+  const us=s.match(/^(\d{1,2})\/(\d{1,2})\/(\d{4})/);
+  if(us)return us[3]+"-"+us[1].padStart(2,'0')+"-"+us[2].padStart(2,'0');
+  const num=parseFloat(s);
+  if(!isNaN(num)&&num>=1000&&num<100000){
+    const d=new Date(Math.round((num-25569)*86400*1000));
+    if(isNaN(d.getTime()))return"";
+    return d.getUTCFullYear()+"-"+String(d.getUTCMonth()+1).padStart(2,'0')+"-"+String(d.getUTCDate()).padStart(2,'0');
+  }
+  return"";
+}
+function parseNum(s){ if(typeof s==="number")return s; if(!s)return 0; const n=parseFloat(String(s).replace(/[^0-9eE.\-]/g,"")); return isNaN(n)?0:n; }
+
+function parseFromArray(rows){
+  const meta={ketua:"",sekretaris:"",bendahara:"",periode:""};
+  for(let i=0;i<Math.min(rows.length,10);i++){
+    const line=(rows[i]||[]).join(" ").toUpperCase();
+    if(line.indexOf("KETUA")>=0){const m=line.match(/KETUA[^:]*:\s*([A-Z .]+?)(?:\s\s|$)/);if(m)meta.ketua=m[1].trim();}
+    if(line.indexOf("SEKRETARIS")>=0){const m=line.match(/SEKRETARIS[^:]*:\s*([A-Z .]+?)(?:\s\s|$)/);if(m)meta.sekretaris=m[1].trim();}
+    if(line.indexOf("BENDAHARA")>=0){const m=line.match(/BENDAHARA[^:]*:\s*([A-Z .]+?)(?:\s\s|$)/);if(m)meta.bendahara=m[1].trim();}
+    if(line.indexOf("PER:")>=0||line.indexOf("PERIODE")>=0){meta.periode=(rows[i]||[]).join(" ").trim();}
+  }
+  let headerIdx=-1;
+  for(let i=0;i<rows.length;i++){
+    const cells=(rows[i]||[]).map(c=>(c||"").toString().toLowerCase().trim());
+    const joined=cells.join("|");
+    if(joined.indexOf("no")>=0&&joined.indexOf("tanggal")>=0&&joined.indexOf("deskripsi")>=0&&joined.indexOf("nominal")>=0){headerIdx=i;break;}
+  }
+  if(headerIdx<0)return{pemasukan:[],pengeluaran:[],meta:meta};
+  const pem=[],pen=[];
+  let lastDateIn="",lastDateOut="",bufferIn="",bufferOut="";
+  for(let i=headerIdx+1;i<rows.length;i++){
+    const r=rows[i]||[];
+    if(r.every(c=>!c||!String(c).trim()))continue;
+    const tglIn=String(r[1]||"").trim(),descIn=String(r[2]||"").trim(),nomInRaw=String(r[3]||"").trim();
+    const dIn=excelSerialToISO(tglIn);if(dIn)lastDateIn=dIn;
+    const nomIn=parseNum(nomInRaw);
+    if(!/jumlah|total/i.test(descIn)){
+      if(nomIn>0&&descIn){const fd=bufferIn?(bufferIn+" "+descIn):descIn;pem.push({tanggal:lastDateIn,deskripsi:fd,nominal:nomIn});bufferIn="";}
+      else if(descIn&&nomIn===0&&!nomInRaw){bufferIn=bufferIn?(bufferIn+" "+descIn):descIn;}
+    }else bufferIn="";
+    const tglOut=String(r[5]||"").trim(),descOut=String(r[6]||"").trim(),nomOutRaw=String(r[7]||"").trim();
+    const dOut=excelSerialToISO(tglOut);if(dOut)lastDateOut=dOut;
+    const nomOut=parseNum(nomOutRaw);
+    if(!/jumlah|total/i.test(descOut)){
+      if(nomOut>0&&descOut){const fd=bufferOut?(bufferOut+" "+descOut):descOut;pen.push({tanggal:lastDateOut,deskripsi:fd,nominal:nomOut});bufferOut="";}
+      else if(descOut&&nomOut===0&&!nomOutRaw){bufferOut=bufferOut?(bufferOut+" "+descOut):descOut;}
+    }else bufferOut="";
+  }
+  return{pemasukan:pem,pengeluaran:pen,meta:meta};
+}
+
+function showBanner(html,type){document.getElementById("bannerArea").innerHTML='<div class="banner '+type+'">'+html+'</div>';}
+function clearBanner(){document.getElementById("bannerArea").innerHTML="";}
+function setMode(t,c){const el=document.getElementById("modeLabel");el.innerHTML=t;el.className="mode "+c;}
+
+function showSetup(){
+  const cur=localStorage.getItem(STORAGE_URL)||"";
+  document.getElementById("setupArea").innerHTML='<div class="setup-form"><h2>&#x1F527; Setup Apps Script Backend</h2><p>Hubungkan ke <b>Google Apps Script</b> untuk membaca Google Sheets PASIBOR.</p><div class="step-card"><b>LANGKAH 1:</b> Buka Apps Script Anda → Deploy → Web app → Anyone → copy URL <code>/exec</code></div><div class="step-card"><b>LANGKAH 2:</b> Paste URL di bawah:</div><textarea id="urlInput" placeholder="https://script.google.com/macros/s/.../exec">'+cur+'</textarea><div style="margin-top:14px;display:flex;gap:8px;flex-wrap:wrap"><button class="btn btn-save" onclick="saveUrl()">&#x1F4BE; Simpan & Muat</button><button class="btn btn-reset" onclick="resetUrl()">&#x1F5D1;&#xFE0F; Hapus</button><button class="btn btn-config" onclick="hideSetup()">&#x274C; Batal</button></div></div>';
+  document.getElementById("setupArea").scrollIntoView({behavior:"smooth"});
+}
+function hideSetup(){document.getElementById("setupArea").innerHTML="";}
+function saveUrl(){const u=document.getElementById("urlInput").value.trim();if(!u){alert("URL kosong");return;}if(u.indexOf("/exec")<0){if(!confirm("URL tidak diakhiri /exec - lanjut?"))return;}localStorage.setItem(STORAGE_URL,u);hideSetup();loadData(true);}
+function resetUrl(){if(!confirm("Hapus URL?"))return;localStorage.removeItem(STORAGE_URL);localStorage.removeItem(STORAGE_CACHE);hideSetup();loadData(true);}
+
+async function loadData(manual){
+  const btn=document.getElementById("btnRefresh"),ico=document.getElementById("refIcon");
+  btn.disabled=true;ico.classList.add("spin");
+  const url=localStorage.getItem(STORAGE_URL);
+  if(!url){
+    PEMASUKAN=[];PENGELUARAN=[];META={ketua:"",sekretaris:"",bendahara:"",periode:""};
+    setMode("BELUM SETUP","demo");
+    showBanner('<b>&#x1F4CC; URL Apps Script belum diatur</b>Klik tombol <b>&#x2699;&#xFE0F; Setup</b> di atas, lalu paste URL /exec dari Apps Script PASIBOR Anda.',"warn");
+    renderAll();btn.disabled=false;ico.classList.remove("spin");return;
+  }
+  setMode("Menghubungkan...","demo");
+  const ctrl=new AbortController();const to=setTimeout(()=>ctrl.abort(),25000);
+  try{
+    const res=await fetch(url,{cache:"no-store",signal:ctrl.signal,redirect:"follow"});
+    clearTimeout(to);
+    if(!res.ok)throw new Error("HTTP "+res.status);
+    const text=await res.text();
+    let json;try{json=JSON.parse(text);}catch(e){throw new Error("Bukan JSON: "+text.substring(0,200));}
+    if(json.success===false)throw new Error(json.error||"Unknown");
+    if(!json.data||!Array.isArray(json.data))throw new Error("Data tidak ada");
+    const parsed=parseFromArray(json.data);
+    PEMASUKAN=parsed.pemasukan;PENGELUARAN=parsed.pengeluaran;META=parsed.meta;
+    try{localStorage.setItem(STORAGE_CACHE,JSON.stringify({data:json.data,ts:Date.now(),sheetName:json.sheetName,rowCount:json.rowCount}));}catch(e){}
+    setMode("&#x2705; LIVE","live");clearBanner();
+    document.getElementById("lastUpdate").textContent=new Date().toLocaleTimeString("id-ID")+" | Sheet: "+json.sheetName+" | "+json.rowCount+" baris";
+    renderAll();
+  }catch(err){
+    clearTimeout(to);
+    let cached=null;try{cached=JSON.parse(localStorage.getItem(STORAGE_CACHE));}catch(e){}
+    if(cached&&cached.data){
+      const parsed=parseFromArray(cached.data);PEMASUKAN=parsed.pemasukan;PENGELUARAN=parsed.pengeluaran;META=parsed.meta;
+      setMode("&#x1F4F4; OFFLINE","offline");
+      showBanner('<b>&#x26A0;&#xFE0F; Offline - pakai cache</b>Terakhir: '+new Date(cached.ts).toLocaleString("id-ID")+'<br><b>Error:</b> '+err.message,"error");
+    }else{
+      PEMASUKAN=[];PENGELUARAN=[];
+      setMode("&#x274C; GAGAL","offline");
+      showBanner('<b>&#x274C; Gagal terhubung</b><b>Error:</b> '+err.message+'<br>Pastikan URL diakhiri <code>/exec</code>.',"error");
+    }
+    renderAll();
+  }finally{btn.disabled=false;ico.classList.remove("spin");}
+}
+
+function inPeriod(iso){if(!FILTER_FROM&&!FILTER_TO)return true;if(!iso)return !FILTER_FROM&&!FILTER_TO;if(FILTER_FROM&&iso<FILTER_FROM)return false;if(FILTER_TO&&iso>FILTER_TO)return false;return true;}
+function getFiltered(){return{pem:PEMASUKAN.filter(r=>inPeriod(r.tanggal)),pen:PENGELUARAN.filter(r=>inPeriod(r.tanggal))};}
+function applyPeriod(kind,el){
+  document.querySelectorAll('.period-filter .quick-btn').forEach(b=>b.classList.remove('active'));
+  if(el)el.classList.add('active');
+  const today=new Date(),iso=d=>d.getFullYear()+'-'+String(d.getMonth()+1).padStart(2,'0')+'-'+String(d.getDate()).padStart(2,'0');
+  if(kind==='all'){FILTER_FROM=null;FILTER_TO=null;document.getElementById('dateFrom').value='';document.getElementById('dateTo').value='';}
+  else if(kind==='month'){const f=new Date(today.getFullYear(),today.getMonth(),1);FILTER_FROM=iso(f);FILTER_TO=iso(today);document.getElementById('dateFrom').value=FILTER_FROM;document.getElementById('dateTo').value=FILTER_TO;}
+  else if(kind==='3months'){const d=new Date(today);d.setMonth(d.getMonth()-3);FILTER_FROM=iso(d);FILTER_TO=iso(today);document.getElementById('dateFrom').value=FILTER_FROM;document.getElementById('dateTo').value=FILTER_TO;}
+  else if(kind==='year'){FILTER_FROM=today.getFullYear()+'-01-01';FILTER_TO=today.getFullYear()+'-12-31';document.getElementById('dateFrom').value=FILTER_FROM;document.getElementById('dateTo').value=FILTER_TO;}
+  renderAll();
+}
+function applyCustomPeriod(el){
+  document.querySelectorAll('.period-filter .quick-btn').forEach(b=>b.classList.remove('active'));
+  if(el)el.classList.add('active');
+  FILTER_FROM=document.getElementById('dateFrom').value||null;
+  FILTER_TO=document.getElementById('dateTo').value||null;
+  renderAll();
+}
+
+function renderAll(){
+  const p=[];
+  if(META.ketua)p.push('<b>Ketua:</b> '+META.ketua);
+  if(META.sekretaris)p.push('<b>Sekretaris:</b> '+META.sekretaris);
+  if(META.bendahara)p.push('<b>Bendahara:</b> '+META.bendahara);
+  document.getElementById("pengurusLabel").innerHTML=p.length?p.join(" &nbsp;|&nbsp; "):"Pengurus PASIBOR";
+  if(META.periode)document.getElementById("periodLabel").textContent=META.periode;
+  const f=getFiltered();
+  const tIn=f.pem.reduce((s,r)=>s+r.nominal,0),tOut=f.pen.reduce((s,r)=>s+r.nominal,0),saldo=tIn-tOut;
+  document.getElementById("totalIn").textContent=rupiah(tIn);
+  document.getElementById("totalOut").textContent=rupiah(tOut);
+  document.getElementById("saldo").textContent=rupiah(saldo);
+  document.getElementById("footIn").textContent=rupiah(tIn);
+  document.getElementById("footOut").textContent=rupiah(tOut);
+  renderIn(document.getElementById("searchIn").value||"");
+  renderOut(document.getElementById("searchOut").value||"");
+  renderCharts(tIn,tOut,saldo);
+  renderMonthlyChart();
+}
+function renderIn(filter){
+  const tb=document.querySelector("#tblIn tbody");tb.innerHTML="";
+  const f=(filter||"").toLowerCase();let no=1;
+  PEMASUKAN.forEach(r=>{
+    if(!inPeriod(r.tanggal))return;
+    if(f&&r.deskripsi.toLowerCase().indexOf(f)<0)return;
+    const tr=document.createElement("tr");
+    tr.innerHTML='<td class="center">'+(no++)+'</td><td>'+fmtDate(r.tanggal)+'</td><td>'+r.deskripsi+'</td><td class="num">'+rupiah(r.nominal)+'</td>';
+    tb.appendChild(tr);
+  });
+}
+function renderOut(filter){
+  const tb=document.querySelector("#tblOut tbody");tb.innerHTML="";
+  const f=(filter||"").toLowerCase();let no=1;
+  PENGELUARAN.forEach(r=>{
+    if(!inPeriod(r.tanggal))return;
+    if(f&&r.deskripsi.toLowerCase().indexOf(f)<0)return;
+    const tr=document.createElement("tr");
+    tr.innerHTML='<td class="center">'+(no++)+'</td><td>'+fmtDate(r.tanggal)+'</td><td>'+r.deskripsi+'</td><td class="num">'+rupiah(r.nominal)+'</td>';
+    tb.appendChild(tr);
+  });
+}
+function barChart(c,data,colors){
+  const W=380,H=260,pad=50;
+  const max=Math.max.apply(null,data.map(d=>d.value).concat([1]))*1.15;
+  const bW=(W-pad*2)/data.length*0.6,gap=(W-pad*2)/data.length*0.4;
+  let svg='<svg viewBox="0 0 '+W+' '+H+'" style="width:100%;height:auto"><line x1="'+pad+'" y1="'+(H-pad)+'" x2="'+(W-pad/2)+'" y2="'+(H-pad)+'" stroke="#999"/>';
+  data.forEach((d,i)=>{
+    const h=(d.value/max)*(H-pad*2),x=pad+i*(bW+gap)+gap/2,y=H-pad-h;
+    svg+='<rect x="'+x+'" y="'+y+'" width="'+bW+'" height="'+h+'" fill="'+colors[i%colors.length]+'" rx="4"/>';
+    svg+='<text x="'+(x+bW/2)+'" y="'+(y-8)+'" text-anchor="middle" font-size="11" font-weight="bold" fill="currentColor">'+rupiah(d.value)+'</text>';
+    svg+='<text x="'+(x+bW/2)+'" y="'+(H-pad+18)+'" text-anchor="middle" font-size="11" fill="currentColor">'+d.label+'</text>';
+  });
+  svg+='</svg>';c.innerHTML=svg;
+}
+function renderCharts(tIn,tOut,saldo){barChart(document.getElementById("chart1"),[{label:"Pemasukan",value:tIn},{label:"Pengeluaran",value:tOut},{label:"Saldo",value:saldo}],["#2E7D32","#C62828","#1565C0"]);}
+function shortRp(n){n=Math.round(n)||0;const a=Math.abs(n);if(a>=1000000)return(n/1000000).toFixed(1).replace('.0','')+'jt';if(a>=1000)return(n/1000).toFixed(0)+'rb';return n.toString();}
+function renderMonthlyChart(){
+  const f=getFiltered();
+  const mIn=new Array(12).fill(0),mOut=new Array(12).fill(0);
+  f.pem.forEach(r=>{if(r.tanggal){const m=parseInt(r.tanggal.substring(5,7))-1;if(m>=0&&m<12)mIn[m]+=r.nominal;}});
+  f.pen.forEach(r=>{if(r.tanggal){const m=parseInt(r.tanggal.substring(5,7))-1;if(m>=0&&m<12)mOut[m]+=r.nominal;}});
+  const W=900,H=360,pad=60,padR=20,padT=50;
+  let max=Math.max.apply(null,mIn.concat(mOut).concat([1]))*1.15;if(max<1)max=1;
+  const gW=(W-pad-padR)/12,bW=gW*0.35;
+  let svg='<svg viewBox="0 0 '+W+' '+H+'" style="width:100%;height:auto;font-family:Segoe UI,sans-serif">';
+  for(let g=0;g<=4;g++){const gy=padT+(H-padT-pad/2)*(g/4),gv=max*(1-g/4);svg+='<line x1="'+pad+'" y1="'+gy+'" x2="'+(W-padR)+'" y2="'+gy+'" stroke="#ccc" stroke-dasharray="3,3" opacity="0.5"/><text x="'+(pad-8)+'" y="'+(gy+4)+'" text-anchor="end" font-size="11" fill="currentColor" opacity="0.7">'+shortRp(gv)+'</text>';}
+  for(let i=0;i<12;i++){
+    const gx=pad+i*gW+gW/2,hI=(mIn[i]/max)*(H-padT-pad/2),hO=(mOut[i]/max)*(H-padT-pad/2),yI=(H-pad/2)-hI,yO=(H-pad/2)-hO;
+    svg+='<rect x="'+(gx-bW-1)+'" y="'+yI+'" width="'+bW+'" height="'+hI+'" fill="#43A047" rx="2"/><rect x="'+(gx+1)+'" y="'+yO+'" width="'+bW+'" height="'+hO+'" fill="#E53935" rx="2"/>';
+    if(mIn[i]>0)svg+='<text x="'+(gx-bW/2-1)+'" y="'+(yI-4)+'" text-anchor="middle" font-size="9" fill="currentColor">'+shortRp(mIn[i])+'</text>';
+    if(mOut[i]>0)svg+='<text x="'+(gx+bW/2+1)+'" y="'+(yO-4)+'" text-anchor="middle" font-size="9" fill="currentColor">'+shortRp(mOut[i])+'</text>';
+    svg+='<text x="'+gx+'" y="'+(H-pad/2+18)+'" text-anchor="middle" font-size="12" fill="currentColor">'+BLN[i]+'</text>';
+  }
+  svg+='<rect x="'+(W/2-130)+'" y="12" width="14" height="14" fill="#43A047"/><text x="'+(W/2-110)+'" y="24" font-size="13" fill="currentColor">Pemasukan</text><rect x="'+(W/2+20)+'" y="12" width="14" height="14" fill="#E53935"/><text x="'+(W/2+40)+'" y="24" font-size="13" fill="currentColor">Pengeluaran</text></svg>';
+  document.getElementById('chartMonthly').innerHTML=svg;
+}
+function toggleTheme(){
+  document.body.classList.toggle('dark');
+  const d=document.body.classList.contains('dark');
+  localStorage.setItem('pasibor_theme',d?'dark':'light');
+  document.getElementById('btnTheme').innerHTML=d?'\u2600\uFE0F Light':'\uD83C\uDF19 Dark';
+}
+function loadHtml2pdf(){
+  if(html2pdfLoaded)return Promise.resolve();
+  if(html2pdfLoading)return html2pdfLoading;
+  html2pdfLoading=new Promise((res,rej)=>{const s=document.createElement('script');s.src='https://cdnjs.cloudflare.com/ajax/libs/html2pdf.js/0.10.1/html2pdf.bundle.min.js';s.onload=()=>{html2pdfLoaded=true;res();};s.onerror=()=>rej(new Error('Gagal load html2pdf'));document.head.appendChild(s);});
+  return html2pdfLoading;
+}
+function exportPDF(){
+  loadHtml2pdf().then(()=>{
+    document.body.classList.add('printing');
+    const wd=document.body.classList.contains('dark');
+    if(wd)document.body.classList.remove('dark');
+    const el=document.querySelector('.container'),date=new Date().toISOString().slice(0,10);
+    const opt={margin:[10,10,10,10],filename:'Dashboard_PASIBOR_'+date+'.pdf',image:{type:'jpeg',quality:0.95},html2canvas:{scale:2,useCORS:true,backgroundColor:'#ffffff'},jsPDF:{unit:'mm',format:'a4',orientation:'portrait'},pagebreak:{mode:['avoid-all','css','legacy']}};
+    html2pdf().from(el).set(opt).save().then(()=>{document.body.classList.remove('printing');if(wd)document.body.classList.add('dark');}).catch(err=>{document.body.classList.remove('printing');if(wd)document.body.classList.add('dark');alert('Gagal PDF: '+err.message);});
+  }).catch(err=>alert('Gagal load library: '+err.message));
+}
+function installPWA(){
+  if(!deferredPrompt){alert('Mungkin sudah terinstal, atau coba menu browser > Install / Add to Home Screen.');return;}
+  deferredPrompt.prompt();
+  deferredPrompt.userChoice.then(()=>{deferredPrompt=null;document.getElementById('btnInstall').style.display='none';});
+}
+window.addEventListener('beforeinstallprompt',e=>{e.preventDefault();deferredPrompt=e;document.getElementById('btnInstall').style.display='inline-block';});
+if('serviceWorker' in navigator){
+  window.addEventListener('load',()=>{
+    navigator.serviceWorker.register('service-worker.js').then(reg=>{
+      // Cek update setiap 60 detik saat halaman terbuka
+      setInterval(()=>reg.update(), 60*1000);
+      
+      // Jika ada SW baru terdeteksi, reload otomatis
+      reg.addEventListener('updatefound',()=>{
+        const newSW = reg.installing;
+        if(newSW){
+          newSW.addEventListener('statechange',()=>{
+            if(newSW.state === 'installed' && navigator.serviceWorker.controller){
+              // Ada versi baru, reload halaman
+              console.log('[PWA] Versi baru tersedia, reloading...');
+              newSW.postMessage({action:'skipWaiting'});
+              setTimeout(()=>window.location.reload(), 500);
+            }
+          });
+        }
+      });
+    }).catch(e=>console.warn('SW fail',e));
+  });
+  
+  // Reload saat SW baru ambil alih
+  let refreshing = false;
+  navigator.serviceWorker.addEventListener('controllerchange',()=>{
+    if(refreshing) return;
+    refreshing = true;
+    window.location.reload();
+  });
+}
+if(localStorage.getItem('pasibor_theme')==='dark'){document.body.classList.add('dark');document.getElementById('btnTheme').innerHTML='\u2600\uFE0F Light';}
+document.getElementById("searchIn").addEventListener("input",e=>renderIn(e.target.value));
+document.getElementById("searchOut").addEventListener("input",e=>renderOut(e.target.value));
+document.getElementById("printDate").textContent="Dicetak: "+new Date().toLocaleDateString("id-ID",{weekday:"long",year:"numeric",month:"long",day:"numeric"});
+window.addEventListener('beforeprint',()=>{document.getElementById('pageTitle').textContent=' ';});
+window.addEventListener('afterprint',()=>{document.getElementById('pageTitle').textContent='Dashboard PASIBOR 2026';});
+loadData();
+setInterval(()=>loadData(false),2*60*1000);
+</script>
+</body>
+</html>
