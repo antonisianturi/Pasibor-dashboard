@@ -334,51 +334,59 @@ function parseNum(s){ if(typeof s==="number")return s; if(!s)return 0; const n=p
 function parseFromArray(rows){
   const meta={ketua:"",sekretaris:"",bendahara:"",periode:""};
   
-  // Helper: extract nama setelah label, stop sebelum label berikutnya
-  function extractName(line, label, stopLabels){
-    const labelIdx = line.indexOf(label);
-    if(labelIdx < 0) return "";
-    const colonIdx = line.indexOf(":", labelIdx);
-    if(colonIdx < 0) return "";
-    let endIdx = line.length;
-    stopLabels.forEach(stop => {
-      const sIdx = line.indexOf(stop, colonIdx + 1);
-      if(sIdx > 0 && sIdx < endIdx) endIdx = sIdx;
-    });
-    return line.substring(colonIdx + 1, endIdx).trim().replace(/\s+/g," ");
-  }
-  
   for(let i=0;i<Math.min(rows.length,10);i++){
-    const line=(rows[i]||[]).join(" ").toUpperCase();
+    const rawLine=(rows[i]||[]).join(" ").trim();
+    const line=rawLine.toUpperCase();
     
-    // Extract pengurus dengan stop di label berikutnya
+    // KETUA: ambil teks setelah "KETUA...:" sampai sebelum SEKRETARIS/BENDAHARA
     if(line.indexOf("KETUA")>=0){
-      const name = extractName(line, "KETUA", ["SEKRETARIS","BENDAHARA","PER:","PERIODE"]);
-      if(name) meta.ketua = name;
+      const colonIdx=line.indexOf(":",line.indexOf("KETUA"));
+      if(colonIdx>=0){
+        let endIdx=line.length;
+        const sek=line.indexOf("SEKRETARIS",colonIdx);
+        const ben=line.indexOf("BENDAHARA",colonIdx);
+        if(sek>0&&sek<endIdx)endIdx=sek;
+        if(ben>0&&ben<endIdx)endIdx=ben;
+        meta.ketua=line.substring(colonIdx+1,endIdx).trim().replace(/\s+/g," ");
+      }
     }
+    
+    // SEKRETARIS: ambil teks setelah "SEKRETARIS:" sampai sebelum BENDAHARA/KETUA
     if(line.indexOf("SEKRETARIS")>=0){
-      const name = extractName(line, "SEKRETARIS", ["BENDAHARA","KETUA","PER:","PERIODE"]);
-      if(name) meta.sekretaris = name;
+      const colonIdx=line.indexOf(":",line.indexOf("SEKRETARIS"));
+      if(colonIdx>=0){
+        let endIdx=line.length;
+        const ben=line.indexOf("BENDAHARA",colonIdx);
+        const ket=line.indexOf("KETUA",colonIdx);
+        if(ben>0&&ben<endIdx)endIdx=ben;
+        if(ket>0&&ket<endIdx)endIdx=ket;
+        meta.sekretaris=line.substring(colonIdx+1,endIdx).trim().replace(/\s+/g," ");
+      }
     }
+    
+    // BENDAHARA: ambil teks setelah "BENDAHARA:" sampai akhir / sebelum label lain
     if(line.indexOf("BENDAHARA")>=0){
-      const name = extractName(line, "BENDAHARA", ["KETUA","SEKRETARIS","PER:","PERIODE"]);
-      if(name) meta.bendahara = name;
+      const colonIdx=line.indexOf(":",line.indexOf("BENDAHARA"));
+      if(colonIdx>=0){
+        let endIdx=line.length;
+        const ket=line.indexOf("KETUA",colonIdx);
+        const sek=line.indexOf("SEKRETARIS",colonIdx);
+        if(ket>0&&ket<endIdx)endIdx=ket;
+        if(sek>0&&sek<endIdx)endIdx=sek;
+        meta.bendahara=line.substring(colonIdx+1,endIdx).trim().replace(/\s+/g," ");
+      }
     }
     
     // PERIODE: ambil HANYA bagian sebelum KETUA/SEKRETARIS/BENDAHARA
     if(line.indexOf("PER:")>=0||line.indexOf("PERIODE")>=0){
-      let raw = (rows[i]||[]).join(" ").trim();
-      // Buang bagian "KETUA UMUM : ... SEKRETARIS : ... BENDAHARA : ..."
-      const cutLabels = ["KETUA","SEKRETARIS","BENDAHARA"];
-      const upper = raw.toUpperCase();
-      let cutAt = raw.length;
-      cutLabels.forEach(lbl => {
-        const idx = upper.indexOf(lbl);
-        if(idx > 0 && idx < cutAt) cutAt = idx;
+      let cutAt=rawLine.length;
+      const upperRaw=rawLine.toUpperCase();
+      ["KETUA","SEKRETARIS","BENDAHARA"].forEach(function(lbl){
+        const idx=upperRaw.indexOf(lbl);
+        if(idx>0&&idx<cutAt)cutAt=idx;
       });
-      meta.periode = raw.substring(0, cutAt).trim().replace(/\s+/g," ").replace(/[,;]+$/,"");
+      meta.periode=rawLine.substring(0,cutAt).trim().replace(/\s+/g," ").replace(/[,;]+$/,"");
     }
-  }
   }
   let headerIdx=-1;
   for(let i=0;i<rows.length;i++){
