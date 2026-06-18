@@ -127,7 +127,7 @@ tfoot td{background:var(--tfoot-bg);font-weight:bold;padding:12px 10px;border-to
    PDF EXPORT (body.printing)
    ============================================ */
 body.printing{background:#fff!important;color:#000!important}
-body.printing .container{box-shadow:none!important;background:#fff!important;max-width:780px!important;width:780px!important;padding:12px!important;margin:0 auto!important}
+body.printing .container{box-shadow:none!important;background:#fff!important;max-width:794px!important;width:794px!important;padding:10px!important;margin:0 auto!important;box-sizing:border-box!important;}
 body.printing .actions,body.printing .search-box,body.printing .status-bar,body.printing .banner,body.printing .setup-form,body.printing .period-filter,body.printing #btnInstall{display:none!important}
 body.printing .card{-webkit-print-color-adjust:exact!important;print-color-adjust:exact!important;padding:14px 16px!important;min-height:70px!important;display:flex!important;flex-direction:column!important;justify-content:center!important;color:#fff!important}
 body.printing .card .label{font-size:10pt!important;color:#fff!important;opacity:1!important;display:block!important}
@@ -137,7 +137,7 @@ body.printing .card.red{background:#C62828!important;background-color:#C62828!im
 body.printing .card.blue{background:#1565C0!important;background-color:#1565C0!important;background-image:none!important}
 body.printing .cards{gap:8px!important;grid-template-columns:repeat(3,1fr)!important;max-width:100%!important}
 body.printing thead th{background:#C62828!important;color:#fff!important;-webkit-print-color-adjust:exact!important}
-body.printing tbody td{color:#000!important;background:transparent!important}
+body.printing tbody td{font-size:8pt!important;color:#000!important;background:transparent!important}
 body.printing tfoot td{background:#FFEBEE!important;-webkit-print-color-adjust:exact!important}
 body.printing tfoot{display:table-row-group!important}
 body.printing svg text{fill:#000!important}
@@ -148,7 +148,7 @@ body.printing .chart-box h3{font-size:11pt!important;margin-bottom:6px!important
 body.printing .charts{overflow:hidden!important}
 body.printing #chart1{max-width:400px!important;margin:0 auto!important}
 body.printing #chart1 svg{max-height:180px!important;max-width:100%!important;width:100%!important;height:auto!important;display:block!important}
-body.printing #chartMonthly svg{max-height:220px!important;max-width:100%!important;width:100%!important;height:auto!important;display:block!important}
+body.printing #chartMonthly svg{max-height:150px!important;max-width:100%!important;width:100%!important;height:auto!important;display:block!important}
 body.printing .table-wrap{page-break-inside:auto}
 body.printing table tbody tr{page-break-inside:avoid}
 body.printing .header{page-break-after:avoid!important;page-break-inside:avoid!important}
@@ -159,6 +159,92 @@ body.printing .section:nth-of-type(2){page-break-after:avoid!important;page-brea
 body.printing .section:nth-of-type(3){page-break-before:avoid!important;page-break-after:always!important;page-break-inside:avoid!important}
 body.printing .section:nth-of-type(4){page-break-after:always!important}
 body.printing .section:nth-of-type(5){page-break-before:always!important}
+/* === FIX GRAFIK PDF === */
+body.printing .charts{
+  display:block!important;
+  width:100%!important;
+  max-width:100%!important;
+  overflow:visible!important;
+}
+body.printing .chart-box{
+  width:100%!important;
+  max-width:100%!important;
+  padding:10px!important;
+  margin:0 0 10px 0!important;
+  page-break-inside:avoid!important;
+  box-sizing:border-box!important;
+  overflow:visible!important;
+}
+body.printing #chart1{
+  width:100%!important;
+  max-width:500px!important;
+  margin:0 auto!important;
+  display:block!important;
+}
+body.printing #chart1 svg{
+  width:100%!important;
+  height:200px!important;        /* ← Fixed height, bukan max-height */
+  max-width:500px!important;
+  display:block!important;
+}
+body.printing #chartMonthly{
+  width:100%!important;
+  max-width:100%!important;
+}
+body.printing #chartMonthly svg{
+  width:100%!important;
+  height:240px!important;        /* ← Fixed height */
+  max-width:100%!important;
+  display:block!important;
+}
+
+/* === FIX TABEL PDF === */
+body.printing table{
+  font-size:9pt!important;       /* ← Lebih kecil */
+  width:100%!important;
+}
+body.printing thead th{
+  font-size:9pt!important;
+  padding:6px 8px!important;
+}
+body.printing tbody td{
+  font-size:9pt!important;
+  padding:5px 8px!important;
+}
+body.printing tfoot td{
+  font-size:10pt!important;
+  padding:7px 8px!important;
+}
+
+/* === FIX CARD PDF === */
+body.printing .cards{
+  display:grid!important;
+  grid-template-columns:repeat(3,1fr)!important;
+  gap:8px!important;
+  width:100%!important;
+  max-width:100%!important;
+}
+body.printing .card{
+  padding:12px 14px!important;
+  min-height:65px!important;
+}
+body.printing .card .label{font-size:9pt!important}
+body.printing .card .value{font-size:14pt!important;margin-top:4px!important}
+
+/* === HEADER PDF === */
+body.printing .header-main{display:flex!important;align-items:center!important;gap:12px!important}
+body.printing .logo-img{width:65px!important;height:65px!important;border-width:2px!important}
+body.printing .title-block h1{font-size:14pt!important}
+body.printing .title-block .subtitle{font-size:9pt!important}
+body.printing .pengurus{font-size:8pt!important;padding:4px 8px!important}
+
+/* === SECTION TITLE PDF === */
+body.printing .section-title{
+  font-size:12pt!important;
+  margin-bottom:8px!important;
+  padding-bottom:4px!important;
+}
+body.printing .section{margin:8px 0!important}
 </style>
 </head>
 <body>
@@ -514,9 +600,16 @@ function exportPDF(){
     const el=document.querySelector('.container');
     const date=new Date().toISOString().slice(0,10);
     
+    // Force container width = A4 (794px) sebelum capture
+    const origStyle = el.getAttribute('style') || '';
+    el.style.cssText = 'width:794px!important;max-width:794px!important;margin:0!important;padding:10px!important;box-sizing:border-box';
+    
+    // Force re-render charts dengan ukuran baru
+    if(typeof renderAll === 'function') renderAll();
+    
     setTimeout(()=>{
       const opt={
-        margin:[10,10,10,10],          // ← Margin kertas (mm): atas, kanan, bawah, kiri
+        margin:[10,10,10,10],
         filename:'Dashboard_PASIBOR_'+date+'.pdf',
         image:{type:'jpeg',quality:0.98},
         html2canvas:{
@@ -525,14 +618,12 @@ function exportPDF(){
           backgroundColor:'#ffffff',
           letterRendering:true,
           logging:false,
-          windowWidth:1500,             // ← Lebar virtual viewport
+          windowWidth:794,            // ← SAMA dengan container width
+          width:794,                  // ← Lock canvas width
           scrollX:0,
           scrollY:0,
-          onclone: function(clonedDoc){
-            // Force re-render chart di clone untuk hindari distorsi
-            const c = clonedDoc.querySelector('.container');
-            if(c) c.style.width = '1100px';
-          }
+          x:0,
+          y:0
         },
         jsPDF:{
           unit:'mm',
@@ -548,14 +639,18 @@ function exportPDF(){
       };
       
       html2pdf().from(el).set(opt).save().then(()=>{
+        el.setAttribute('style', origStyle);
         document.body.classList.remove('printing');
         if(wd)document.body.classList.add('dark');
+        if(typeof renderAll === 'function') renderAll();
       }).catch(err=>{
+        el.setAttribute('style', origStyle);
         document.body.classList.remove('printing');
         if(wd)document.body.classList.add('dark');
+        if(typeof renderAll === 'function') renderAll();
         alert('Gagal PDF: '+err.message);
       });
-    }, 500);
+    }, 600);
   }).catch(err=>alert('Gagal load library: '+err.message));
 }
 function installPWA(){
