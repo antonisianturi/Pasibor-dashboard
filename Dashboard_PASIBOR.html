@@ -514,10 +514,9 @@ function exportPDF(){
     const el=document.querySelector('.container');
     const date=new Date().toISOString().slice(0,10);
     
-    // Tunggu re-render setelah class 'printing' applied
     setTimeout(()=>{
       const opt={
-        margin:[10,10,10,10],
+        margin:[12,12,12,12],          // ← Margin kertas (mm): atas, kanan, bawah, kiri
         filename:'Dashboard_PASIBOR_'+date+'.pdf',
         image:{type:'jpeg',quality:0.98},
         html2canvas:{
@@ -526,9 +525,14 @@ function exportPDF(){
           backgroundColor:'#ffffff',
           letterRendering:true,
           logging:false,
-          windowWidth:1024,
+          windowWidth:1100,             // ← Lebar virtual viewport
           scrollX:0,
-          scrollY:0
+          scrollY:0,
+          onclone: function(clonedDoc){
+            // Force re-render chart di clone untuk hindari distorsi
+            const c = clonedDoc.querySelector('.container');
+            if(c) c.style.width = '1100px';
+          }
         },
         jsPDF:{
           unit:'mm',
@@ -539,7 +543,7 @@ function exportPDF(){
         pagebreak:{
           mode:['css','legacy'],
           before:'.section:nth-of-type(4), .section:nth-of-type(5)',
-          avoid:['.chart-box','.card','tr','thead','tfoot']
+          avoid:['.chart-box','.card','tr','thead','tfoot','.header']
         }
       };
       
