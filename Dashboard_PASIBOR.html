@@ -6,127 +6,12 @@
 <title id="pageTitle">PASIBOR 2026</title>
 <link rel="manifest" href="manifest.json">
 <meta name="theme-color" content="#C62828">
+<meta name="mobile-web-app-capable" content="yes">
 <meta name="apple-mobile-web-app-capable" content="yes">
 <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
 <meta name="apple-mobile-web-app-title" content="PASIBOR">
 <link rel="apple-touch-icon" href="logo.png">
 <link rel="icon" href="logo.png">
-/* ========================================
-   PATCH FINAL v3 - Cetak & PDF
-   ======================================== */
-
-/* === BUNGKUS Grafik 1 + Grafik Per Bulan jadi satu unit === */
-/* Tambah class custom via JS untuk grouping */
-
-/* CETAK BROWSER */
-@media print {
-  /* Reset semua page-break sebelumnya */
-  .section { page-break-inside: avoid !important; page-break-after: auto !important; }
-  
-  /* Halaman 1: Header + RINGKASAN saja */
-  .header { page-break-after: avoid !important; page-break-inside: avoid !important; }
-  .section:nth-of-type(1) {  /* RINGKASAN */
-    page-break-after: always !important;
-    page-break-inside: avoid !important;
-  }
-  
-  /* Halaman 2: GRAFIK + GRAFIK PER BULAN dalam satu halaman */
-  .section:nth-of-type(2) {  /* GRAFIK */
-    page-break-after: avoid !important;
-    page-break-before: auto !important;
-    page-break-inside: avoid !important;
-  }
-  .section:nth-of-type(3) {  /* GRAFIK PER BULAN */
-    page-break-before: avoid !important;
-    page-break-after: always !important;
-    page-break-inside: avoid !important;
-  }
-  
-  /* Halaman 3+: Tabel */
-  .section:nth-of-type(4) {  /* DAFTAR PEMASUKAN */
-    page-break-before: auto !important;
-    page-break-after: always !important;
-  }
-  .section:nth-of-type(5) {  /* DAFTAR PENGELUARAN */
-    page-break-before: always !important;
-  }
-  
-  /* Ukuran Chart fit A4 */
-  .chart-box { 
-    page-break-inside: avoid !important; 
-    padding: 8px !important;
-    margin-bottom: 8px !important;
-  }
-  #chart1 { max-width: 400px !important; margin: 0 auto !important; }
-  #chart1 svg { max-height: 180px !important; width: 100% !important; height: auto !important; }
-  #chartMonthly svg { max-height: 220px !important; width: 100% !important; height: auto !important; }
-  
-  /* Section title lebih compact */
-  .section { margin: 10px 0 !important; }
-  .section-title { font-size: 12pt !important; margin-bottom: 8px !important; padding-bottom: 4px !important; }
-  .chart-box h3 { font-size: 10pt !important; margin-bottom: 6px !important; }
-}
-
-/* PDF EXPORT */
-body.printing .section { page-break-inside: avoid !important; page-break-after: auto !important; }
-body.printing .header { page-break-after: avoid !important; }
-body.printing .section:nth-of-type(1) {
-  page-break-after: always !important;
-  page-break-inside: avoid !important;
-}
-body.printing .section:nth-of-type(2) {
-  page-break-after: avoid !important;
-  page-break-inside: avoid !important;
-}
-body.printing .section:nth-of-type(3) {
-  page-break-before: avoid !important;
-  page-break-after: always !important;
-  page-break-inside: avoid !important;
-}
-body.printing .section:nth-of-type(4) {
-  page-break-after: always !important;
-}
-body.printing .section:nth-of-type(5) {
-  page-break-before: always !important;
-}
-
-/* Container fit A4 saat PDF */
-body.printing .container {
-  max-width: 780px !important;
-  width: 780px !important;
-  padding: 12px !important;
-  margin: 0 auto !important;
-}
-body.printing .chart-box {
-  page-break-inside: avoid !important;
-  padding: 8px !important;
-  margin-bottom: 6px !important;
-  max-width: 100% !important;
-  overflow: hidden !important;
-  box-sizing: border-box !important;
-}
-body.printing .charts { overflow: hidden !important; }
-body.printing #chart1 { max-width: 400px !important; margin: 0 auto !important; }
-body.printing #chart1 svg {
-  max-height: 180px !important;
-  max-width: 100% !important;
-  width: 100% !important;
-  height: auto !important;
-  display: block !important;
-}
-body.printing #chartMonthly svg {
-  max-height: 220px !important;
-  max-width: 100% !important;
-  width: 100% !important;
-  height: auto !important;
-  display: block !important;
-}
-body.printing .section { margin: 8px 0 !important; }
-body.printing .section-title { font-size: 13pt !important; margin-bottom: 8px !important; padding-bottom: 4px !important; }
-body.printing .chart-box h3 { font-size: 11pt !important; margin-bottom: 6px !important; }
-body.printing .cards { gap: 8px !important; }
-body.printing .card { padding: 10px 12px !important; }
-body.printing .card .value { font-size: 14pt !important; margin-top: 4px !important; }
 <style>
 :root{--bg:#F5F5F5;--container-bg:#fff;--text:#222;--muted:#555;--border:#E0E0E0;--accent:#C62828;--accent-soft:#FDECEA;--table-head:#C62828;--table-stripe:#F9F9F9;--table-hover:#FFF8E1;--chart-bg:#FAFAFA;--status-bar:#F0F4F8;--tfoot-bg:#FFEBEE;--pengurus-bg:#FFF8E1;}
 body.dark{--bg:#0F1419;--container-bg:#1A1F2E;--text:#E4E6EB;--muted:#A8B0BC;--border:#2A3142;--accent:#E57373;--accent-soft:#3A1F1F;--table-head:#5F2A2A;--table-stripe:#1F2533;--table-hover:#2A3142;--chart-bg:#1F2533;--status-bar:#1F2533;--tfoot-bg:#3F1E1E;--pengurus-bg:#2A2418;}
@@ -185,162 +70,87 @@ td.num,th.num{text-align:right}td.center,th.center{text-align:center}
 tfoot td{background:var(--tfoot-bg);font-weight:bold;padding:12px 10px;border-top:2px solid var(--accent);font-size:16px;color:var(--text)}
 .footer{margin-top:40px;padding-top:20px;border-top:2px solid var(--border);text-align:center;color:var(--muted);font-size:14px}
 @media(max-width:768px){.cards{grid-template-columns:1fr}.header-main{flex-direction:column;text-align:center}.actions{justify-content:center}.title-block{min-width:0;width:100%}.title-block h1{font-size:20px}.btn{font-size:12px;padding:8px 10px}}
+
+/* ============================================
+   CETAK BROWSER (window.print)
+   ============================================ */
 @media print{
-@page{size:A4 portrait;margin:1.2cm}@page :first{margin-top:1cm}
-body{background:#fff!important;color:#000!important;padding:0!important;font-size:11pt!important}
-body.dark{background:#fff!important;color:#000!important}
-.container{box-shadow:none!important;padding:0!important;max-width:100%!important;background:#fff!important}
-.actions,.search-box,.status-bar,.banner,.setup-form,.period-filter,#btnInstall{display:none!important}
-.header{page-break-after:avoid;border-bottom:3px solid #C62828!important}
-.logo-img{width:80px!important;height:80px!important;border:2px solid #C62828!important}
-.title-block h1{font-size:16pt!important;color:#C62828!important}
-.pengurus{font-size:9pt!important;background:#FFF8E1!important;color:#000!important;-webkit-print-color-adjust:exact!important;print-color-adjust:exact!important}
-.section{margin:14px 0!important;page-break-inside:avoid}
-.section-title{font-size:13pt!important;page-break-after:avoid}
-.cards{display:grid!important;grid-template-columns:repeat(3,1fr)!important;gap:10px!important}
-.card{color:#fff!important;-webkit-print-color-adjust:exact!important;print-color-adjust:exact!important;padding:12px 14px!important;box-shadow:none!important}
-.card .value{font-size:16pt!important}
-.chart-box{page-break-inside:avoid;background:#fff!important;border:1px solid #999!important;-webkit-print-color-adjust:exact!important;print-color-adjust:exact!important}
-table{page-break-inside:auto;font-size:10pt!important}
-thead{display:table-header-group}
-tfoot{display:table-row-group}
-thead th{background:#C62828!important;color:#fff!important;-webkit-print-color-adjust:exact!important;print-color-adjust:exact!important}
-tbody tr{background:#fff!important;-webkit-print-color-adjust:exact!important}
-tbody tr:nth-child(even){background:#F9F9F9!important;-webkit-print-color-adjust:exact!important}
-tbody td{color:#000!important}
-tfoot td{background:#FFEBEE!important;color:#000!important;-webkit-print-color-adjust:exact!important;print-color-adjust:exact!important}
-svg text{fill:#000!important}
-/* === PATCH: Page break sesuai struktur PASIMBUR === */
+  @page{size:A4 portrait;margin:1.2cm}
+  @page :first{margin-top:1cm}
+  body{background:#fff!important;color:#000!important;padding:0!important;font-size:11pt!important}
+  body.dark{background:#fff!important;color:#000!important}
+  .container{box-shadow:none!important;padding:0!important;max-width:100%!important;background:#fff!important}
+  .actions,.search-box,.status-bar,.banner,.setup-form,.period-filter,#btnInstall{display:none!important}
+  .header{border-bottom:3px solid #C62828!important;page-break-after:avoid!important;page-break-inside:avoid!important}
+  .logo-img{width:80px!important;height:80px!important;border:2px solid #C62828!important}
+  .title-block h1{font-size:16pt!important;color:#C62828!important}
+  .pengurus{font-size:9pt!important;background:#FFF8E1!important;color:#000!important;-webkit-print-color-adjust:exact!important;print-color-adjust:exact!important}
+  .section{margin:10px 0!important;page-break-inside:avoid!important;page-break-after:auto!important}
+  .section-title{font-size:12pt!important;page-break-after:avoid!important;margin-bottom:8px!important;padding-bottom:4px!important}
+  .cards{display:grid!important;grid-template-columns:repeat(3,1fr)!important;gap:10px!important}
+  .card{color:#fff!important;-webkit-print-color-adjust:exact!important;print-color-adjust:exact!important;padding:10px 12px!important;box-shadow:none!important}
+  .card .value{font-size:14pt!important;margin-top:4px!important}
+  .chart-box{page-break-inside:avoid!important;background:#fff!important;border:1px solid #999!important;padding:8px!important;margin-bottom:8px!important;-webkit-print-color-adjust:exact!important;print-color-adjust:exact!important}
+  .chart-box h3{font-size:10pt!important;margin-bottom:6px!important}
+  #chart1{max-width:400px!important;margin:0 auto!important}
+  #chart1 svg{max-height:180px!important;width:100%!important;height:auto!important;display:block!important}
+  #chartMonthly svg{max-height:220px!important;width:100%!important;height:auto!important;display:block!important}
+  table{page-break-inside:auto;font-size:10pt!important}
+  thead{display:table-header-group}
+  tfoot{display:table-row-group}
+  thead th{background:#C62828!important;color:#fff!important;-webkit-print-color-adjust:exact!important;print-color-adjust:exact!important}
+  tbody tr{background:#fff!important;-webkit-print-color-adjust:exact!important}
+  tbody tr:nth-child(even){background:#F9F9F9!important;-webkit-print-color-adjust:exact!important}
+  tbody td{color:#000!important}
+  tfoot td{background:#FFEBEE!important;color:#000!important;-webkit-print-color-adjust:exact!important;print-color-adjust:exact!important}
+  svg text{fill:#000!important}
+  .table-wrap{page-break-inside:auto}
+  table tbody tr{page-break-inside:avoid;page-break-after:auto}
 
-/* Header + RINGKASAN tetap satu halaman */
-.header{page-break-after:avoid!important}
-
-/* Halaman 1: RINGKASAN → break ke halaman 2 */
-.section:nth-of-type(1){
-  page-break-after:always!important;
+  /* === PAGE BREAK RULES === */
+  /* Hal 1: Header + RINGKASAN */
+  .section:nth-of-type(1){page-break-after:always!important;page-break-inside:avoid!important}
+  /* Hal 2: GRAFIK + GRAFIK PER BULAN dalam satu halaman */
+  .section:nth-of-type(2){page-break-after:avoid!important;page-break-before:auto!important;page-break-inside:avoid!important}
+  .section:nth-of-type(3){page-break-before:avoid!important;page-break-after:always!important;page-break-inside:avoid!important}
+  /* Hal 3+: DAFTAR PEMASUKAN */
+  .section:nth-of-type(4){page-break-before:auto!important;page-break-after:always!important}
+  /* Hal akhir: DAFTAR PENGELUARAN */
+  .section:nth-of-type(5){page-break-before:always!important}
 }
 
-/* Halaman 2: GRAFIK + GRAFIK PER BULAN */
-.section:nth-of-type(2),
-.section:nth-of-type(3){
-  page-break-inside:avoid!important;
-}
-
-/* Setelah GRAFIK PER BULAN → break ke halaman 3 (tabel) */
-.section:nth-of-type(3){
-  page-break-after:always!important;
-}
-
-/* DAFTAR PEMASUKAN → setelah selesai, break ke halaman PENGELUARAN */
-.section:nth-of-type(4){
-  page-break-after:always!important;
-}
-
-/* Tabel: header (thead) tetap muncul di tiap halaman untuk context,
-   tapi tfoot hanya di akhir tabel */
-.table-wrap{page-break-inside:auto}
-table tbody tr{page-break-inside:avoid;page-break-after:auto}
-/* === PATCH: Page break Cetak Browser === */
-.header{page-break-after:avoid!important}
-.section:nth-of-type(1){page-break-after:always!important}
-.section:nth-of-type(2){page-break-after:avoid!important;page-break-inside:avoid!important}
-.section:nth-of-type(3){page-break-after:always!important;page-break-inside:avoid!important}
-.section:nth-of-type(4){page-break-after:always!important}
-.section:nth-of-type(5){page-break-before:always!important}
-
-/* Grafik fit di Cetak */
-.chart-box{max-width:100%!important;overflow:visible!important}
-#chart1 svg,#chartMonthly svg{max-width:100%!important;width:100%!important;height:auto!important;display:block!important}
-#chartMonthly svg{max-height:280px!important}
-#chart1 svg{max-height:240px!important}
-#chart1{max-width:500px!important;margin:0 auto!important}
-}
+/* ============================================
+   PDF EXPORT (body.printing)
+   ============================================ */
 body.printing{background:#fff!important;color:#000!important}
-body.printing .container{box-shadow:none!important;background:#fff!important}
+body.printing .container{box-shadow:none!important;background:#fff!important;max-width:780px!important;width:780px!important;padding:12px!important;margin:0 auto!important}
 body.printing .actions,body.printing .search-box,body.printing .status-bar,body.printing .banner,body.printing .setup-form,body.printing .period-filter,body.printing #btnInstall{display:none!important}
-body.printing .card{-webkit-print-color-adjust:exact!important;print-color-adjust:exact!important}
+body.printing .card{-webkit-print-color-adjust:exact!important;print-color-adjust:exact!important;padding:10px 12px!important}
+body.printing .card .value{font-size:14pt!important;margin-top:4px!important}
+body.printing .cards{gap:8px!important;grid-template-columns:repeat(3,1fr)!important;max-width:100%!important}
 body.printing thead th{background:#C62828!important;color:#fff!important;-webkit-print-color-adjust:exact!important}
 body.printing tbody td{color:#000!important;background:transparent!important}
 body.printing tfoot td{background:#FFEBEE!important;-webkit-print-color-adjust:exact!important}
-body.printing svg text{fill:#000!important}
 body.printing tfoot{display:table-row-group!important}
-body.printing .header{page-break-after:avoid!important}
-body.printing .section:nth-of-type(1){page-break-after:always!important}
-body.printing .section:nth-of-type(2),
-body.printing .section:nth-of-type(3){page-break-inside:avoid!important}
-body.printing .section:nth-of-type(3){page-break-after:always!important}
-body.printing .section:nth-of-type(4){page-break-after:always!important}
+body.printing svg text{fill:#000!important}
+body.printing .section{margin:8px 0!important;page-break-inside:avoid!important;page-break-after:auto!important}
+body.printing .section-title{font-size:13pt!important;margin-bottom:8px!important;padding-bottom:4px!important}
+body.printing .chart-box{page-break-inside:avoid!important;padding:8px!important;margin-bottom:6px!important;max-width:100%!important;overflow:hidden!important;box-sizing:border-box!important}
+body.printing .chart-box h3{font-size:11pt!important;margin-bottom:6px!important}
+body.printing .charts{overflow:hidden!important}
+body.printing #chart1{max-width:400px!important;margin:0 auto!important}
+body.printing #chart1 svg{max-height:180px!important;max-width:100%!important;width:100%!important;height:auto!important;display:block!important}
+body.printing #chartMonthly svg{max-height:220px!important;max-width:100%!important;width:100%!important;height:auto!important;display:block!important}
 body.printing .table-wrap{page-break-inside:auto}
 body.printing table tbody tr{page-break-inside:avoid}
-/* === PATCH: Grafik fit di halaman A4 === */
-body.printing .chart-box{
-  page-break-inside:avoid!important;
-  max-width:100%!important;
-  overflow:visible!important;
-}
-body.printing #chart1{
-  max-width:500px!important;
-  margin:0 auto!important;
-}
-body.printing #chart1 svg,
-body.printing #chartMonthly svg{
-  max-width:100%!important;
-  width:100%!important;
-  height:auto!important;
-  display:block!important;
-}
-body.printing #chartMonthly svg{
-  max-height:280px!important;
-}
-body.printing #chart1 svg{
-  max-height:240px!important;
-}
-/* === PATCH: Page break sesuai struktur PASIMBUR === */
-/* Halaman 1: Header + RINGKASAN saja */
-body.printing .header{page-break-after:avoid!important}
-body.printing .section:nth-of-type(1){page-break-after:always!important}
+body.printing .header{page-break-after:avoid!important;page-break-inside:avoid!important}
 
-/* Halaman 2: GRAFIK + GRAFIK PER BULAN */
+/* === PAGE BREAK PDF === */
+body.printing .section:nth-of-type(1){page-break-after:always!important;page-break-inside:avoid!important}
 body.printing .section:nth-of-type(2){page-break-after:avoid!important;page-break-inside:avoid!important}
-body.printing .section:nth-of-type(3){page-break-after:always!important;page-break-inside:avoid!important}
-
-/* Halaman 3+: DAFTAR PEMASUKAN (full pages) */
+body.printing .section:nth-of-type(3){page-break-before:avoid!important;page-break-after:always!important;page-break-inside:avoid!important}
 body.printing .section:nth-of-type(4){page-break-after:always!important}
-
-/* Halaman akhir: DAFTAR PENGELUARAN */
 body.printing .section:nth-of-type(5){page-break-before:always!important}
-/* === PATCH FINAL: Fix grafik terpotong di PDF (html2canvas) === */
-/* Paksa container fit A4 saat export PDF */
-body.printing .container{
-  max-width:790px!important;
-  width:790px!important;
-  margin:0 auto!important;
-  padding:15px!important;
-}
-body.printing .charts{
-  max-width:100%!important;
-  overflow:hidden!important;
-  display:block!important;
-}
-body.printing .chart-box{
-  max-width:100%!important;
-  overflow:hidden!important;
-  width:100%!important;
-  box-sizing:border-box!important;
-}
-body.printing .chart-box svg{
-  max-width:100%!important;
-  width:100%!important;
-  height:auto!important;
-  display:block!important;
-}
-/* Tambahan: cards tidak overflow */
-body.printing .cards{
-  max-width:100%!important;
-  display:grid!important;
-  grid-template-columns:repeat(3,1fr)!important;
-  gap:10px!important;
-}
 </style>
 </head>
 <body>
@@ -417,8 +227,7 @@ body.printing .cards{
   Dashboard PASIBOR - Parsadaan Siallagan Dohot Boruna<br>
   <span id="printDate"></span>
 </div>
-</div>
-<script>
+</div><script>
 const STORAGE_URL = "pasibor_final_url";
 const STORAGE_CACHE = "pasibor_final_cache";
 let PEMASUKAN = [], PENGELUARAN = [];
@@ -449,12 +258,9 @@ function parseNum(s){ if(typeof s==="number")return s; if(!s)return 0; const n=p
 
 function parseFromArray(rows){
   const meta={ketua:"",sekretaris:"",bendahara:"",periode:""};
-  
   for(let i=0;i<Math.min(rows.length,10);i++){
     const rawLine=(rows[i]||[]).join(" ").trim();
     const line=rawLine.toUpperCase();
-    
-    // KETUA: ambil teks setelah "KETUA...:" sampai sebelum SEKRETARIS/BENDAHARA
     if(line.indexOf("KETUA")>=0){
       const colonIdx=line.indexOf(":",line.indexOf("KETUA"));
       if(colonIdx>=0){
@@ -466,8 +272,6 @@ function parseFromArray(rows){
         meta.ketua=line.substring(colonIdx+1,endIdx).trim().replace(/\s+/g," ");
       }
     }
-    
-    // SEKRETARIS: ambil teks setelah "SEKRETARIS:" sampai sebelum BENDAHARA/KETUA
     if(line.indexOf("SEKRETARIS")>=0){
       const colonIdx=line.indexOf(":",line.indexOf("SEKRETARIS"));
       if(colonIdx>=0){
@@ -479,8 +283,6 @@ function parseFromArray(rows){
         meta.sekretaris=line.substring(colonIdx+1,endIdx).trim().replace(/\s+/g," ");
       }
     }
-    
-    // BENDAHARA: ambil teks setelah "BENDAHARA:" sampai akhir / sebelum label lain
     if(line.indexOf("BENDAHARA")>=0){
       const colonIdx=line.indexOf(":",line.indexOf("BENDAHARA"));
       if(colonIdx>=0){
@@ -492,8 +294,6 @@ function parseFromArray(rows){
         meta.bendahara=line.substring(colonIdx+1,endIdx).trim().replace(/\s+/g," ");
       }
     }
-    
-    // PERIODE: ambil HANYA bagian sebelum KETUA/SEKRETARIS/BENDAHARA
     if(line.indexOf("PER:")>=0||line.indexOf("PERIODE")>=0){
       let cutAt=rawLine.length;
       const upperRaw=rawLine.toUpperCase();
@@ -702,33 +502,19 @@ function exportPDF(){
     document.body.classList.add('printing');
     const wd=document.body.classList.contains('dark');
     if(wd)document.body.classList.remove('dark');
-    
     const el=document.querySelector('.container');
     const date=new Date().toISOString().slice(0,10);
-    
-    // Force container width
     const origStyle = el.getAttribute('style') || '';
     el.style.cssText = 'width:780px!important;max-width:780px!important;margin:0!important;padding:12px!important';
-    
-    // Tunggu sebentar agar style applied & chart re-rendered
     setTimeout(()=>{
       const opt={
         margin:[8,8,8,8],
         filename:'Dashboard_PASIBOR_'+date+'.pdf',
         image:{type:'jpeg',quality:0.95},
-        html2canvas:{
-          scale:2,
-          useCORS:true,
-          backgroundColor:'#ffffff',
-          windowWidth:820,
-          width:800,
-          letterRendering:true,
-          logging:false
-        },
+        html2canvas:{scale:2,useCORS:true,backgroundColor:'#ffffff',windowWidth:820,width:800,letterRendering:true,logging:false},
         jsPDF:{unit:'mm',format:'a4',orientation:'portrait',compress:true},
         pagebreak:{mode:['css','legacy'], avoid:['.chart-box','.card','tr']}
       };
-      
       html2pdf().from(el).set(opt).save().then(()=>{
         el.setAttribute('style', origStyle);
         document.body.classList.remove('printing');
@@ -741,7 +527,7 @@ function exportPDF(){
       });
     }, 300);
   }).catch(err=>alert('Gagal load library: '+err.message));
-}s
+}
 function installPWA(){
   if(!deferredPrompt){alert('Mungkin sudah terinstal, atau coba menu browser > Install / Add to Home Screen.');return;}
   deferredPrompt.prompt();
@@ -751,16 +537,12 @@ window.addEventListener('beforeinstallprompt',e=>{e.preventDefault();deferredPro
 if('serviceWorker' in navigator){
   window.addEventListener('load',()=>{
     navigator.serviceWorker.register('service-worker.js').then(reg=>{
-      // Cek update setiap 60 detik saat halaman terbuka
       setInterval(()=>reg.update(), 60*1000);
-      
-      // Jika ada SW baru terdeteksi, reload otomatis
       reg.addEventListener('updatefound',()=>{
         const newSW = reg.installing;
         if(newSW){
           newSW.addEventListener('statechange',()=>{
             if(newSW.state === 'installed' && navigator.serviceWorker.controller){
-              // Ada versi baru, reload halaman
               console.log('[PWA] Versi baru tersedia, reloading...');
               newSW.postMessage({action:'skipWaiting'});
               setTimeout(()=>window.location.reload(), 500);
@@ -770,8 +552,6 @@ if('serviceWorker' in navigator){
       });
     }).catch(e=>console.warn('SW fail',e));
   });
-  
-  // Reload saat SW baru ambil alih
   let refreshing = false;
   navigator.serviceWorker.addEventListener('controllerchange',()=>{
     if(refreshing) return;
