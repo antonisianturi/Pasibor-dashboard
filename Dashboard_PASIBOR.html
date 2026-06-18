@@ -516,7 +516,7 @@ function exportPDF(){
     
     setTimeout(()=>{
       const opt={
-        margin:[12,12,12,12],          // ← Margin kertas (mm): atas, kanan, bawah, kiri
+        margin:[10,10,10,10],          // ← Margin kertas (mm): atas, kanan, bawah, kiri
         filename:'Dashboard_PASIBOR_'+date+'.pdf',
         image:{type:'jpeg',quality:0.98},
         html2canvas:{
@@ -525,7 +525,7 @@ function exportPDF(){
           backgroundColor:'#ffffff',
           letterRendering:true,
           logging:false,
-          windowWidth:1100,             // ← Lebar virtual viewport
+          windowWidth:1200,             // ← Lebar virtual viewport
           scrollX:0,
           scrollY:0,
           onclone: function(clonedDoc){
