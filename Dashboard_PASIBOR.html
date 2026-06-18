@@ -88,8 +88,12 @@ tfoot td{background:var(--tfoot-bg);font-weight:bold;padding:12px 10px;border-to
   .section{margin:10px 0!important;page-break-inside:avoid!important;page-break-after:auto!important}
   .section-title{font-size:12pt!important;page-break-after:avoid!important;margin-bottom:8px!important;padding-bottom:4px!important}
   .cards{display:grid!important;grid-template-columns:repeat(3,1fr)!important;gap:10px!important}
-  .card{color:#fff!important;-webkit-print-color-adjust:exact!important;print-color-adjust:exact!important;padding:10px 12px!important;box-shadow:none!important}
-  .card .value{font-size:14pt!important;margin-top:4px!important}
+  .card{color:#fff!important;-webkit-print-color-adjust:exact!important;print-color-adjust:exact!important;padding:14px 16px!important;box-shadow:none!important;min-height:70px!important;display:flex!important;flex-direction:column!important;justify-content:center!important}
+  .card .label{font-size:10pt!important;color:#fff!important;opacity:1!important;display:block!important}
+  .card .value{font-size:15pt!important;color:#fff!important;margin-top:6px!important;display:block!important;line-height:1.2!important;font-weight:bold!important}
+  .card.green{background:#2E7D32!important;background-color:#2E7D32!important}
+  .card.red{background:#C62828!important;background-color:#C62828!important}
+  .card.blue{background:#1565C0!important;background-color:#1565C0!important}
   .chart-box{page-break-inside:avoid!important;background:#fff!important;border:1px solid #999!important;padding:8px!important;margin-bottom:8px!important;-webkit-print-color-adjust:exact!important;print-color-adjust:exact!important}
   .chart-box h3{font-size:10pt!important;margin-bottom:6px!important}
   #chart1{max-width:400px!important;margin:0 auto!important}
@@ -125,8 +129,12 @@ tfoot td{background:var(--tfoot-bg);font-weight:bold;padding:12px 10px;border-to
 body.printing{background:#fff!important;color:#000!important}
 body.printing .container{box-shadow:none!important;background:#fff!important;max-width:780px!important;width:780px!important;padding:12px!important;margin:0 auto!important}
 body.printing .actions,body.printing .search-box,body.printing .status-bar,body.printing .banner,body.printing .setup-form,body.printing .period-filter,body.printing #btnInstall{display:none!important}
-body.printing .card{-webkit-print-color-adjust:exact!important;print-color-adjust:exact!important;padding:10px 12px!important}
-body.printing .card .value{font-size:14pt!important;margin-top:4px!important}
+body.printing .card{-webkit-print-color-adjust:exact!important;print-color-adjust:exact!important;padding:14px 16px!important;min-height:70px!important;display:flex!important;flex-direction:column!important;justify-content:center!important;color:#fff!important}
+body.printing .card .label{font-size:10pt!important;color:#fff!important;opacity:1!important;display:block!important}
+body.printing .card .value{font-size:15pt!important;color:#fff!important;margin-top:6px!important;display:block!important;line-height:1.2!important;font-weight:bold!important}
+body.printing .card.green{background:#2E7D32!important;background-color:#2E7D32!important;background-image:none!important}
+body.printing .card.red{background:#C62828!important;background-color:#C62828!important;background-image:none!important}
+body.printing .card.blue{background:#1565C0!important;background-color:#1565C0!important;background-image:none!important}
 body.printing .cards{gap:8px!important;grid-template-columns:repeat(3,1fr)!important;max-width:100%!important}
 body.printing thead th{background:#C62828!important;color:#fff!important;-webkit-print-color-adjust:exact!important}
 body.printing tbody td{color:#000!important;background:transparent!important}
